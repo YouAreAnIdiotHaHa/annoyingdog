@@ -100,8 +100,8 @@ while running:
     dino.y += dino.playerVelocity
     if dino.playerVelocity != 0:
         dino.playerVelocity += dino.GRAVITY
-
-    screen.blit(dino.img, (dino.x, dino.y) )
+    dino.collisionrect = (dino.x, dino.y)
+    screen.blit(dino.img,  dino.collisionrect)
     pygame.draw.rect(screen, "blue", pygame.Rect(30, 30, 202, 30), border_radius= 8)
     pygame.draw.rect(screen, "darkblue", pygame.Rect(31, 31, 200, 28), border_radius=8)
     pygame.draw.rect(screen, "lightblue", pygame.Rect(31, 31, dino.stamina*5, 28), border_radius=8)
