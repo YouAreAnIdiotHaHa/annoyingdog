@@ -28,6 +28,7 @@ enemies_spawned = []
 
 pygame.mixer.music.load("mus/mus_normal.mp3")
 pygame.mixer.music.play(loops=-1)
+test_variable = 0
 ###################################################################################################################
 
 
