@@ -16,3 +16,4 @@ class Dino:
         self.flippedImage = pygame.transform.flip(self.img,flip_x= True, flip_y= False)
         self.staminaRegenCooldown = 0
         self.hitsound = pygame.mixer.Sound("sfx/sfx_hitsound.mp3")
+        self.collisionrect = self.img.get_rect()
