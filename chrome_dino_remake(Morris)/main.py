@@ -45,13 +45,13 @@ while running:
 
     keys = pygame.key.get_pressed()
     if keys[pygame.K_a]:
-        dino.x -= dino.playerSpeed
+        dino.collisionrect.x -= dino.playerSpeed
         dino.direction = 0
         dino.playerSpeed = 18.75/2
         dino.img = dino.flippedImage
 
     if keys[pygame.K_d]:
-        dino.x += dino.playerSpeed
+        dino.collisionrect.x += dino.playerSpeed
         dino.direction = 1
         dino.playerSpeed = 18.75/2
         dino.img = dino.img_original
@@ -67,7 +67,7 @@ while running:
             dino.staminaRegenCooldown = 5
             isRunning = False
     if keys[pygame.K_z]:
-        bird = Enemies(img="img/bird0.png",img2="img/bird1.png",spawnRangeMin=0,spawnRangeMax=5,attack=1,health=5,speed=10)
+        bird = Enemies(img="img/bird0.png",img2="img/bird1.png",spawnRangeMin=0,spawnRangeMax=5,attack=1,health=5,speed=10,location_y=400)
         enemies_spawned.append(bird)
         print(enemies_spawned)
 
@@ -80,7 +80,7 @@ while running:
 
 #CLick.end
 
-    if dino.y == 640:
+    if dino.collisionrect.y == 640:
         if keys[pygame.K_SPACE]:
             dino.playerVelocity = dino.jumpStrength
 
@@ -89,18 +89,17 @@ while running:
 
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("white")
-    if dino.y >= 641:
-        dino.y = 640
+    if dino.collisionrect.y >= 641:
+        dino.collisionrect.y = 640
         dino.playerVelocity = 0
     else:
-        if dino.y < 640:
-            dino.y += dino.GRAVITY
+        if dino.collisionrect.y < 640:
+            dino.collisionrect.y += dino.GRAVITY
 
     screen.blit(ground, (0, 650))
-    dino.y += dino.playerVelocity
+    dino.collisionrect.y += dino.playerVelocity
     if dino.playerVelocity != 0:
         dino.playerVelocity += dino.GRAVITY
-    dino.collisionrect = (dino.x, dino.y)
     screen.blit(dino.img,  dino.collisionrect)
     pygame.draw.rect(screen, "blue", pygame.Rect(30, 30, 202, 30), border_radius= 8)
     pygame.draw.rect(screen, "darkblue", pygame.Rect(31, 31, 200, 28), border_radius=8)
@@ -114,21 +113,24 @@ while running:
 
     if dino.clickCooldown > 0:
         if dino.direction == 0:
-            attack_rect.topleft = (dino.x - 40, dino.y)
+            attack_rect.topleft = (dino.collisionrect.x - 40, dino.collisionrect.y)
         else:
-            attack_rect.topleft = (dino.x + 40, dino.y)
+            attack_rect.topleft = (dino.collisionrect.x + 40, dino.collisionrect.y)
         dino.clickCooldown -= 1
     if dino.clickCooldown >= 3:
         screen.blit(attack, attack_rect)
 
     dino.jumpStrength = -30
     if len(enemies_spawned):
+        if dino.collisionrect.colliderect(enemies_spawned[0].collisionrect):
+            print("touch")
+
         if birdstate%2 == 0:
-            screen.blit(enemies_spawned[0].img, (enemies_spawned[0].spawnLocation_x, 500))
+            screen.blit(enemies_spawned[0].img, (enemies_spawned[0].collisionrect.x, 500))
         else:
-            screen.blit(enemies_spawned[0].img2, (enemies_spawned[0].spawnLocation_x, 500))
+            screen.blit(enemies_spawned[0].img2, (enemies_spawned[0].collisionrect.x, 500))
         birdstate += 1
-        enemies_spawned[0].spawnLocation_x -= 10
+        enemies_spawned[0].collisionrect.x -= 10
 
     if dino.staminaRegenCooldown > 0:
         dino.staminaRegenCooldown -= 1

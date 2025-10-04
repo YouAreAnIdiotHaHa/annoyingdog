@@ -11,9 +11,7 @@ class Dino:
         self.stamina = 40
         self.healthCap = 10
         self.health = 10
-        self.x = 0
-        self.y = 640
         self.flippedImage = pygame.transform.flip(self.img,flip_x= True, flip_y= False)
         self.staminaRegenCooldown = 0
         self.hitsound = pygame.mixer.Sound("sfx/sfx_hitsound.mp3")
-        self.collisionrect = self.img.get_rect()
+        self.collisionrect = self.img.get_rect(topleft=(0, 640))
